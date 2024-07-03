@@ -1,1 +1,2 @@
-console.log('bo')
+console.log('bo');
+
