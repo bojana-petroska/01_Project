@@ -44,6 +44,10 @@ The JavaScript part of the project includes functionalities to:
 - Use JavaScript File API to load [CSV](https://drive.google.com/file/d/1MsTv6JcQ1d57Otk6MUdFMf2J0p6MVbPq/) view data into the application.
 - Implement csv-parser library to parse CSV data and store it in an array of JavaScript objects.
 
+```shell
+Have Fun : )
+```
+
 
 
 
