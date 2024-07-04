@@ -85,3 +85,9 @@ body {
         width: 100%;
     }
 }
+
+#search-icon {
+    border: none;
+    background-color: #ffffff;
+    cursor: pointer;
+}
