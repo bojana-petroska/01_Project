@@ -1,77 +1,50 @@
-// const csv = require('csv-parser');
-// const fs = require('fs');
-// import csv from 'csv-parser';
-// import fs from 'fs';
+document.addEventListener('DOMContentLoaded', () => {
+  loadCSV('items.csv', (data) => {
+    const inventory = parseCSV(data);
+    console.log(inventory);
+    displayItems(inventory);  
+  });
+});
 
-const results = [];
-console.log('bo');
+function loadCSV(url, callback) {
+  fetch(url)
+    .then(response => response.text())
+    .then(data => callback(data))
+    .catch(error => console.error('Error loading CSV file:', error));
+}
 
-// fs.createReadStream('items.csv')
-//   .pipe(csv())
-//   .on('data', (data) => {
-//     //console.log(data);
-//     results.push(data);
-//   })
-//   .on('end', () => {
-//     //console.log(results);
-//     // You can now work with the parsed CSV data in the `results` array
+function parseCSV(data) {
+  const lines = data.split('\n');
+  const headers = lines[0].split(',').map(header => header.trim());
+  const items = [];
 
-//     const filteredResults = results.filter((item) => item.category === 'Tops');
-//     //console.log(filteredResults);
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].split(',');
+    if (line.length === headers.length) {
+      const item = {};
+      headers.forEach((header, index) => {
+        item[header] = line[index].trim();
+      });
+      items.push(item);
+    }
+  }
+  return items;
+}
 
-//     // results.forEach(item => {
-//     //     console.log(`Item: ${item.name}`);
-//     //     console.log(`Image: ${item.image}`);
-//     //     console.log(item.price);
-//     //     console.log(item.image);
-//     // });
+function displayItems(items) {
+  const itemTemplate = document.getElementById('item-layout');
+  const displayedItems = document.getElementById('view-available-items');  
+  displayedItems.innerHTML = ''; 
 
-//     function displayItems(items) {
-//       const itemTemplate = document.getElementById('item-layout');
-//       const displayedItems = document.getElementById('item');
+  items.forEach((item) => {
+    const clone = document.importNode(itemTemplate.content, true);
+    clone.querySelector('.item-image').src = item.image;
+    clone.querySelector('.item-image').alt = item.name;
+    clone.querySelector('.item-name').textContent = item.name;
+    clone.querySelector('.item-price').textContent = `$${item.price}`;
+    displayedItems.appendChild(clone);
+  });
+}
 
-//       items.forEach((item) => {
-//         const clone = document.importNode(itemTemplate.content, true);
-//         clone.querySelector('.item-image').src = item.image;
-//         clone.querySelector('.item-name').textContent = item.name;
-//         clone.querySelector('.item-price').textContent = item.price;
-
-//         displayedItems.appendChild(clone);
-//       });
-//     }
-
-//     console.log(results);
-//     displayItems(results);
-//   });
-
-// document.addEventListener('DOMContentLoaded', () => {
-//   console.log('DOMContentLoaded event fired');
-
-//   // Fetch data
-//   fetch('/items')
-//     .then((response) => response.json())
-//     .then((data) => {
-//       console.log(`Data: ${data}`);
-
-// //View Available Items: Users can browse through the inventory of clothing items available in the store.
-
-//       const displayItems = document.getElementById('view-available-items');
-//       const itemLayout = document.getElementById('item-layout').content;
-
-//       data.forEach((item) => {
-//         const clone = itemLayout.cloneNode(true);
-//         clone.querySelector('.item-name').textContent = item.name;
-//         clone.querySelector('.item-image').src = item.image;
-//         clone.querySelector('.item-image').alt = item.name;
-//         clone.querySelector(
-//           '.item-price'
-//         ).textContent = `Price: $${item.price}`;
-
-//         // 'Add to Cart' button functionality comes here
-//         displayItems.appendChild(clone);
-//       });
-//     })
-//     .catch((error) => console.error('Error fetching items:', error));
-// });
 
 
