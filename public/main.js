@@ -1,6 +1,45 @@
 let allItems = [];
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  const toggleButton = document.getElementById('toggle-filters');
+  const filterContainer = document.getElementById('filter-container');
+
+  toggleButton.addEventListener('click', () => {
+    filterContainer.classList.toggle('show');
+  });
+
+  const searchNameInput = document.getElementById('search-name');
+  const searchSizeInput = document.getElementById('search-size');
+  const searchIcon = document.getElementById('search-icon');
+  const searchForm = document.getElementById('search-form');
+
+  searchIcon.addEventListener('click', function(event) {
+    event.preventDefault(); 
+
+    searchForm.classList.toggle('active');
+
+    if (searchForm.classList.contains('active')) {
+      searchNameInput.style.display = 'inline-block';
+      searchSizeInput.style.display = 'inline-block';
+    } else {
+      searchNameInput.style.display = 'none';
+      searchSizeInput.style.display = 'none';
+    }
+  });
+
+  // Close search form when clicking outside
+  document.addEventListener('click', function(event) {
+    const isClickInsideSearchForm = searchForm.contains(event.target);
+    const isToggleButton = event.target === searchIcon;
+
+    if (!isClickInsideSearchForm && !isToggleButton) {
+      searchForm.classList.remove('active');
+      searchNameInput.style.display = 'none';
+      searchSizeInput.style.display = 'none';
+    }
+  });
+
   loadCSV('items.csv', (data) => {
 
     const inventory = parseCSV(data);
@@ -76,8 +115,7 @@ function displayItems(items) {
   });
 }
 
-
-const searchItems = (items, searchName = '', searchSize = '') => {
+function searchItems(items, searchName = '', searchSize = '') {
   // Filter items based on search criteria
   const results = items.filter((item) => {
     const nameMatch = item.name.toLowerCase().includes(searchName);
@@ -87,8 +125,6 @@ const searchItems = (items, searchName = '', searchSize = '') => {
 
   return results;
 };
-
-console.log('bo')
 
 function populateFilterOptions(items) {
   const sexes = new Set(items.map(item => item.sex));
@@ -135,7 +171,5 @@ function applyFilters() {
   }
 
   console.log("Filtered and sorted items:", filteredItems);
-
-
   displayItems(filteredItems);
 }
