@@ -159,3 +159,9 @@ select {
         grid-template-columns: 1fr;
     }
 }
+
+#search-icon {
+    border: none;
+    background-color: #ffffff;
+    cursor: pointer;
+}

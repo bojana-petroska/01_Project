@@ -19,6 +19,31 @@
       </button>
     </div>
 
+
+    <form id="search-form">
+      <label for="search-name"></label>
+      <input type="text" id="search-name" name="search-name" placeholder="search items by name">
+      
+      <label for="search-size"></label>
+      <input type="text" id="search-size" name="search-size" placeholder="search items by size">
+      
+      <button id="search-icon" type="submit">
+        <svg
+          width="23"
+          height="23"
+          viewBox="0 0 23 23"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M9.44339 18.9396C4.21321 18.9396 0 14.7826 0 9.62217C0 4.46172 4.21321 0.304688 9.44339 0.304688C14.6736 0.304688 18.8868 4.46172 18.8868 9.62217C18.8868 14.7826 14.6736 18.9396 9.44339 18.9396ZM9.44339 1.73815C5.01226 1.73815 1.45283 5.25012 1.45283 9.62217C1.45283 13.9942 5.01226 17.5062 9.44339 17.5062C13.8745 17.5062 17.434 13.9942 17.434 9.62217C17.434 5.25012 13.8745 1.73815 9.44339 1.73815Z"
+            fill="black" />
+          <path
+            d="M16.4764 15.5469L22.9996 21.9831L21.9724 22.9966L15.4492 16.5603L16.4764 15.5469Z"
+            fill="black" />
+        </svg>
+      </button>
+    </form>
+
     <div class="filter-container">
       <select id="sex-filter">
         <option value="">All Genders</option>
@@ -40,15 +65,20 @@
       <button id="apply-filters">Apply Filters</button>
     </div>
 
+
     <div id="view-available-items" class="items-container">
     </div>
 
+   
+    <!-- Template for displaying items -->
     <template id="item-layout">
-      <div class="item">
+      <div id="item">
+
         <img class="item-image" src="" alt="" />
         <div class="item-details">
           <p class="item-name"></p>
           <p class="item-price"></p>
+
         </div>
         <button class="add-to-cart-btn">Add to Cart</button>
       </div>
