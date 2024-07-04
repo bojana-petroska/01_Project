@@ -5,24 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="main.js" defer></script>
-    <link rel="stylesheet" href="style.css">
+    <!-- <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script> -->
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1>First Project: Bo & Dani</h1>
-
     <h2>View Available Items</h2>
-    <p id="view-available-items"></p>
+
+
+    <div id="view-available-items" class="items-container">
+      <!-- Items added here -->
+    </div>
 
     <!-- Template for displaying items -->
     <template id="item-layout">
-      <div class="item">
-        <h3 class="item-name"></h3>
+      <div id="item">
+
         <img class="item-image" src="" alt="" />
-        <p class="item-price"></p>
-        <p class="item-color"></p>
-        <p class="item-size"></p>
+        <div class="item-details">
+          <p class="item-name"></p>
+          <p class="item-price"></p>
+          <button class="add-to-cart-btn">Add to Cart</button>
+
+
+        </div>
       </div>
     </template>
 
+    <div id="output"></div>
   </body>
 </html>
