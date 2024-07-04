@@ -25,9 +25,11 @@ The user interface is designed using HTML to display the inventory of the clothi
 The HTML part of the project includes the structure of the webpage, which consists of the following sections:
 
 - **Inventory Display:** A section to display the list of available items.
-- **Shopping Cart:** A section to display items added to the shopping cart.
-- **Search Bar:** A search bar for users to search for items.
-- **Filter Options:** Options to filter items based on categories.
+- **Shopping Cart:** A second page to display items added to the shopping cart. Add to cart button.
+- **Search Bar:** A search bar for users to search for items by name and size.
+- **Filter Options:** Options to filter items based on categories, size and color.
+- **Sort Options:** Options to sort items based on price.
+
 
 #### *JavaScript*
 
@@ -36,8 +38,9 @@ The JavaScript part of the project includes functionalities to:
 - Load the dataset and display the items dynamically on the webpage.
 - Add items to the shopping cart.
 - Display items in the shopping cart.
-- Implement the search functionality to allow users to search for items by various attributes.
-- Implement the filtering functionality to allow users to filter items based on categories.
+- Implement the search functionality to allow users to search for items by name and size.
+- Implement the filtering functionality to allow users to filter items based on categories, size and color.
+- Implement the sorting functionality to allow users to filter items based on price.
 
 #### *Data Handling and Integration*
 
