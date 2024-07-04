@@ -1,9 +1,14 @@
+let allItems = [];
+
 document.addEventListener('DOMContentLoaded', () => {
   loadCSV('items.csv', (data) => {
-    const inventory = parseCSV(data);
-    console.log(inventory);
-    displayItems(inventory);  
+    allItems = parseCSV(data);
+    console.log("Loaded items:", allItems);
+    displayItems(allItems);
+    populateFilterOptions(allItems);
   });
+
+  document.getElementById('apply-filters').addEventListener('click', applyFilters);
 });
 
 function loadCSV(url, callback) {
@@ -33,8 +38,9 @@ function parseCSV(data) {
 
 function displayItems(items) {
   const itemTemplate = document.getElementById('item-layout');
-  const displayedItems = document.getElementById('view-available-items');  
-  displayedItems.innerHTML = ''; 
+  const displayedItems = document.getElementById('view-available-items');
+
+  displayedItems.innerHTML = '';
 
   items.forEach((item) => {
     const clone = document.importNode(itemTemplate.content, true);
@@ -46,5 +52,51 @@ function displayItems(items) {
   });
 }
 
+function populateFilterOptions(items) {
+  const sexes = new Set(items.map(item => item.sex));
+  const categories = new Set(items.map(item => item.category));
+  const sizes = new Set(items.map(item => item.size));
+  const colors = new Set(items.map(item => item.color));
 
+  populateSelect('sex-filter', sexes);
+  populateSelect('category-filter', categories);
+  populateSelect('size-filter', sizes);
+  populateSelect('color-filter', colors);
+}
 
+function populateSelect(id, options) {
+  const select = document.getElementById(id);
+  options.forEach(option => {
+    const optionElement = document.createElement('option');
+    optionElement.value = option;
+    optionElement.textContent = option;
+    select.appendChild(optionElement);
+  });
+}
+
+function applyFilters() {
+  const sexFilter = document.getElementById('sex-filter').value;
+  const categoryFilter = document.getElementById('category-filter').value;
+  const sizeFilter = document.getElementById('size-filter').value;
+  const colorFilter = document.getElementById('color-filter').value;
+  const sortOption = document.getElementById('sort-option').value;
+
+  console.log("Applying filters:", { sexFilter, categoryFilter, sizeFilter, colorFilter, sortOption });
+
+  let filteredItems = allItems.filter(item => 
+    (sexFilter === '' || item.sex === sexFilter) &&
+    (categoryFilter === '' || item.category === categoryFilter) &&
+    (sizeFilter === '' || item.size === sizeFilter) &&
+    (colorFilter === '' || item.color === colorFilter)
+  );
+
+  if (sortOption === 'price-asc') {
+    filteredItems.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+  } else if (sortOption === 'price-desc') {
+    filteredItems.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+  }
+
+  console.log("Filtered and sorted items:", filteredItems);
+
+  displayItems(filteredItems);
+}
