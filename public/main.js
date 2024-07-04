@@ -75,3 +75,5 @@ const searchItems = (items, searchName = '', searchSize = '') => {
   return results;
 };
 
+console.log('bo')
+
