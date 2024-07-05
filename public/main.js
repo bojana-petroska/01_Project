@@ -8,21 +8,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchSizeInput = document.getElementById('search-size');
   const searchIcon = document.getElementById('search-icon');
   const searchForm = document.getElementById('search-form');
+  const applyFiltersButton = document.getElementById('apply-filters');
 
-  toggleButton.addEventListener('click', () => {
+  toggleButton.addEventListener('click', (event) => {
+    event.stopPropagation();
     filterContainer.classList.toggle('show');
   });
 
-  // document.addEventListener('click', function (event) {
-  //   isClickInsideFilterForm = toggleButton.contains(event.target);
-  //   const isToggleButton = event.target === toggleButton;
+  document.addEventListener('click', (event) => {
+    const isClickInsideFilter = filterContainer.contains(event.target);
+    const isToggleButton = event.target === toggleButton;
+    const isApplyFiltersButton = event.target === applyFiltersButton;
 
-  //   if (!isClickInsideFilterForm && !isToggleButton) {
-  //     filterContainer.classList.remove('show');
-  //     //searchNameInput.style.display = 'none';
-  //     //searchSizeInput.style.display = 'none';
-  //   }
-  // })
+    if (!isClickInsideFilter && !isToggleButton) {
+      filterContainer.classList.remove('show');
+    }
+
+    if (isApplyFiltersButton) {
+      filterContainer.classList.remove('show');
+    }
+  });
+
+  // Close filter form when filter apply clicked
+  applyFiltersButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    filterContainer.classList.remove('show');
+  });
+
+  filterContainer.addEventListener('click', (event) => {
+    event.stopPropagation();
+  });
 
   // Close search form when clicking outside
   document.addEventListener('click', function (event) {
@@ -45,12 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
       searchNameInput.style.display = 'inline-block';
       searchSizeInput.style.display = 'inline-block';
     } else {
-      const searchName = searchNameInput
-        .value.trim()
-        .toLowerCase();
-  
+      const searchName = searchNameInput.value.trim().toLowerCase();
+
       const results = searchItems(inventory, searchName, searchSizeInput.value);
-  
+
       displayItems(results);
     }
   });
@@ -65,10 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
     populateFilterOptions(inventory);
   });
 
-  document.getElementById('apply-filters').addEventListener('click', applyFilters);
+  document
+    .getElementById('apply-filters')
+    .addEventListener('click', applyFilters);
   document.getElementById('cart-button').addEventListener('click', showCart);
   updateCartButton();
-
 });
 
 function loadCSV(url, callback) {
@@ -116,10 +130,10 @@ function displayItems(items) {
     clone.querySelector('.item-image').alt = item.name;
     clone.querySelector('.item-name').textContent = item.name;
     clone.querySelector('.item-price').textContent = `$${item.price}`;
-    
+
     const addToCartBtn = clone.querySelector('.add-to-cart-btn');
     addToCartBtn.addEventListener('click', () => addToCart(item));
-    
+
     displayedItems.appendChild(clone);
   });
 }
@@ -193,12 +207,12 @@ function applyFilters() {
 
 function addToCart(item) {
   cart.push({
-      name: item.name,
-      price: item.price,
-      image: item.image  // Asegúrate de que esto esté incluido
+    name: item.name,
+    price: item.price,
+    image: item.image,
   });
   localStorage.setItem('cart', JSON.stringify(cart));
-  showMessage('Product added to cart');
+  showMessage('Product successfully added to the cart');
   updateCartButton();
 }
 
@@ -233,6 +247,6 @@ function resetCart() {
 
 window.addEventListener('message', (event) => {
   if (event.data === 'resetCart') {
-      resetCart();
+    resetCart();
   }
 });
