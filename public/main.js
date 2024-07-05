@@ -189,7 +189,12 @@ function applyFilters() {
 }
 
 function addToCart(item) {
-  cart.push(item);
+  cart.push({
+      name: item.name,
+      price: item.price,
+      image: item.image  // Asegúrate de que esto esté incluido
+  });
+  localStorage.setItem('cart', JSON.stringify(cart));
   showMessage('Product added to cart');
   updateCartButton();
 }
@@ -217,3 +222,14 @@ function showCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
   window.open('cart.html', '_blank');
 }
+
+function resetCart() {
+  cart = [];
+  updateCartButton();
+}
+
+window.addEventListener('message', (event) => {
+  if (event.data === 'resetCart') {
+      resetCart();
+  }
+});
