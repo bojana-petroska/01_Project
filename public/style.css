@@ -20,8 +20,6 @@ body {
 }
 
 h1 {
-  /* two diff fonts? */
-  /* font-family: 'Playfair Display', serif; */
   text-align: center;
   font-size: var(--textBig);
 }
@@ -270,6 +268,11 @@ select {
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.cart-item.selected {
+  background-color: var(--blue); /* Change background color when selected */
 }
 
 #cart-total {
@@ -278,18 +281,20 @@ select {
     text-align: right;
 }
 
-#checkout-btn {
+#checkout-btn,
+#remove-item-button {
     display: block;
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
+    background-color: var(--blue);
+    color: var(--white);
     border: none;
     cursor: pointer;
 }
 
-#checkout-btn:hover {
-    background-color: #2980b9;
+#checkout-btn:hover,
+#remove-item-button:hover {
+    background-color: var(--blueHover);
 }
 
 .message {
@@ -298,7 +303,7 @@ select {
     left: 50%;
     transform: translateX(-50%);
     background-color: #4CAF50;
-    color: white;
+    color: var(--white);
     padding: 15px;
     border-radius: 5px;
     opacity: 0;
@@ -319,4 +324,6 @@ select {
     padding: 2px 6px;
     font-size: 12px;
 }
+
+
 
