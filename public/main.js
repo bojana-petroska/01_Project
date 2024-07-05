@@ -1,21 +1,20 @@
-let allItems = [];
+let inventory = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-
   const toggleButton = document.getElementById('toggle-filters');
   const filterContainer = document.getElementById('filter-container');
-
-  toggleButton.addEventListener('click', () => {
-    filterContainer.classList.toggle('show');
-  });
-
   const searchNameInput = document.getElementById('search-name');
   const searchSizeInput = document.getElementById('search-size');
   const searchIcon = document.getElementById('search-icon');
   const searchForm = document.getElementById('search-form');
 
-  searchIcon.addEventListener('click', function(event) {
-    event.preventDefault(); 
+  toggleButton.addEventListener('click', () => {
+    filterContainer.classList.toggle('show');
+  });
+
+  searchIcon.addEventListener('click', function (event) {
+    event.preventDefault();
+    console.log('bo');
 
     searchForm.classList.toggle('active');
 
@@ -29,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Close search form when clicking outside
-  document.addEventListener('click', function(event) {
+  document.addEventListener('click', function (event) {
     const isClickInsideSearchForm = searchForm.contains(event.target);
     const isToggleButton = event.target === searchIcon;
 
@@ -40,38 +39,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  loadCSV('items.csv', (data) => {
+  searchForm.addEventListener('submit', function (event) {
+    event.preventDefault();
 
-    const inventory = parseCSV(data);
-    console.log(inventory);
-    displayItems(inventory);
+    const searchName = searchNameInput
+      .value.trim()
+      .toLowerCase();
 
-    const searchForm = document.getElementById('search-form');
+    const results = searchItems(inventory, searchName, searchSizeInput.value);
 
-    searchForm.addEventListener('submit', function (event) {
-      event.preventDefault();
-
-      const searchNameInput = document
-        .getElementById('search-name')
-        .value.trim()
-        .toLowerCase();
-      const searchSizeInput = document
-        .getElementById('search-size')
-        .value.trim();
-
-      const results = searchItems(inventory, searchNameInput, searchSizeInput);
-
-      displayItems(results);
-    });
-
-    allItems = parseCSV(data);
-    console.log("Loaded items:", allItems);
-    displayItems(allItems);
-    populateFilterOptions(allItems);
-
+    displayItems(results);
   });
 
-  document.getElementById('apply-filters').addEventListener('click', applyFilters);
+  loadCSV('items.csv', (data) => {
+    inventory = parseCSV(data);
+    console.log(inventory);
+
+    shuffleArray(inventory);
+    displayItems(inventory);
+
+    populateFilterOptions(inventory);
+  });
+
+  document
+    .getElementById('apply-filters')
+    .addEventListener('click', applyFilters);
 });
 
 function loadCSV(url, callback) {
@@ -99,6 +91,14 @@ function parseCSV(data) {
   return items;
 }
 
+// Random loading of the items on each refresh
+function shuffleArray(items) {
+  for (let i = items.length - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+}
+
 function displayItems(items) {
   const itemTemplate = document.getElementById('item-layout');
   const displayedItems = document.getElementById('view-available-items');
@@ -123,16 +123,17 @@ function searchItems(items, searchName = '', searchSize = '') {
     return (searchName === '' || nameMatch) && (searchSize === '' || sizeMatch);
   });
 
+  console.log('buuuuu');
   return results;
-};
+}
 
 function populateFilterOptions(items) {
-  const sexes = new Set(items.map(item => item.sex));
-  const categories = new Set(items.map(item => item.category));
-  const sizes = new Set(items.map(item => item.size));
-  const colors = new Set(items.map(item => item.color));
+  const genders = new Set(items.map((item) => item.gender));
+  const categories = new Set(items.map((item) => item.category));
+  const sizes = new Set(items.map((item) => item.size));
+  const colors = new Set(items.map((item) => item.color));
 
-  populateSelect('sex-filter', sexes);
+  populateSelect('gender-filter', genders);
   populateSelect('category-filter', categories);
   populateSelect('size-filter', sizes);
   populateSelect('color-filter', colors);
@@ -140,7 +141,7 @@ function populateFilterOptions(items) {
 
 function populateSelect(id, options) {
   const select = document.getElementById(id);
-  options.forEach(option => {
+  options.forEach((option) => {
     const optionElement = document.createElement('option');
     optionElement.value = option;
     optionElement.textContent = option;
@@ -149,19 +150,26 @@ function populateSelect(id, options) {
 }
 
 function applyFilters() {
-  const sexFilter = document.getElementById('sex-filter').value;
+  const genderFilter = document.getElementById('gender-filter').value;
   const categoryFilter = document.getElementById('category-filter').value;
   const sizeFilter = document.getElementById('size-filter').value;
   const colorFilter = document.getElementById('color-filter').value;
   const sortOption = document.getElementById('sort-option').value;
 
-  console.log("Applying filters:", { sexFilter, categoryFilter, sizeFilter, colorFilter, sortOption });
+  console.log('Applying filters:', {
+    genderFilter,
+    categoryFilter,
+    sizeFilter,
+    colorFilter,
+    sortOption,
+  });
 
-  let filteredItems = allItems.filter(item => 
-    (sexFilter === '' || item.sex === sexFilter) &&
-    (categoryFilter === '' || item.category === categoryFilter) &&
-    (sizeFilter === '' || item.size === sizeFilter) &&
-    (colorFilter === '' || item.color === colorFilter)
+  let filteredItems = inventory.filter(
+    (item) =>
+      (genderFilter === '' || item.gender === genderFilter) &&
+      (categoryFilter === '' || item.category === categoryFilter) &&
+      (sizeFilter === '' || item.size === sizeFilter) &&
+      (colorFilter === '' || item.color === colorFilter)
   );
 
   if (sortOption === 'price-asc') {
@@ -170,6 +178,6 @@ function applyFilters() {
     filteredItems.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
   }
 
-  console.log("Filtered and sorted items:", filteredItems);
+  console.log('Filtered and sorted items:', filteredItems);
   displayItems(filteredItems);
 }

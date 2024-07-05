@@ -37,9 +37,7 @@ h1 {
   align-items: center;
 }
 
-select,
-#search-name,
-#search-size {
+select {
   font-size: var(--textNormal);
   padding: 10px;
   border: 0.5px solid #ddd;
@@ -210,6 +208,7 @@ select,
     display: flex;
     align-items: center;
     position: relative;
+    gap: 10px;
   }
   
   .search-form.active {
