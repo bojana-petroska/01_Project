@@ -332,10 +332,17 @@ select {
   #apply-filters {
     width: 100%;
   }
+
+  h1 {
+    font-size: var(--textNormal);
+  }
+
 }
 
 @media (max-width: 480px) {
   .items-container {
     grid-template-columns: 1fr;
   }
+
+  
 }
